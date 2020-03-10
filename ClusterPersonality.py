@@ -17,6 +17,8 @@ print(userDf.head())
 # plot clustering output on the two datasets
 def cluster_plots(set1, set2, colours1 = 'gray', colours2 = 'gray',
                   title1 = 'Dataset 1',  title2 = 'Dataset 2'):
+
+
     fig,(ax1,ax2) = plt.subplots(1, 2)
     fig.set_size_inches(6, 3)
     ax1.set_title(title1,fontsize=14)
@@ -51,7 +53,7 @@ plt.plot(range(1, 11), wcss)
 plt.title('The Elbow Method')
 plt.xlabel('Number of clusters')
 plt.ylabel('WCSS')
-plt.show()
+#plt.show()    plot is temperorly disabled
 
 # Fitting K-Means to the dataset
 kmeans = KMeans(n_clusters = 4, init = 'k-means++', random_state = 42)
@@ -64,7 +66,10 @@ cluster = pd.DataFrame(y_kmeans1)
 
 # Adding cluster to the Dataset1
 userDf['cluster'] = cluster
+userDf2 = pd.read_csv('D:\\final year project\Datasets\\user.csv')
+userDf['UID'] = userDf2['UID']
 print(userDf)
+export_csv = userDf.to_csv (r'D:\\final year project\Datasets\\user_export_dataframe.csv', index = None, header=True)
 
 correct = 0
 print(kmeans.predict([[2.65  ,3.00  ,3.15  ,3.25,  4.40], [ 4.50,  4.00,  3.00,  4.50,  3.75]]))
@@ -81,3 +86,14 @@ print(kmeans.predict([[1,2,3], [10,0,0]]))
 print(kmeans.cluster_centers_)
 #array([[10.,  2.],[ 1.,  2.]])
 '''
+moviesDf = pd.read_csv("D:\\final year project\Datasets\\Movies.csv",header=0,encoding = 'unicode_escape')
+df = pd.read_csv("D:\\final year project\Datasets\\UserMovies.csv")
+df.columns = ['a', 'UID','movieId','d']
+userMoviesDf = df[['a','UID','movieId']]
+
+
+result = pd.merge( userMoviesDf, moviesDf, left_on='movieId', right_on='movieId')
+print(result)
+
+
+

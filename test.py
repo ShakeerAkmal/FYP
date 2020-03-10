@@ -2,9 +2,9 @@ import csv
 import numpy as np
 import pandas as pd
 #import ALS as als
-#import ALS_recommendation as als2
-#import Cosine_Similarity as cos
-import ClusterPersonality as cluster
+# import ALS_recommendation as als2
+import Cosine_Similarity as cos
+#import ClusterPersonality as cluster
 import sys, getopt, pprint
 from pymongo import MongoClient
 #CSV to JSON Conversion
@@ -39,4 +39,4 @@ def insertUsersToDb():
 
 #als2
 #cos
-cluster
+#cluster

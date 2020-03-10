@@ -23,7 +23,6 @@ def getGenreSimilarity():
     return item_similarity_df
 
 #################################################################################################
-#https://www.youtube.com/watch?v=3ecNC-So0r4
 
 def getFeatureSimilarity():
     print(movies)
