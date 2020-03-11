@@ -1,99 +1,103 @@
 import pandas as pd
 import numpy as np
+import glob
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
 
 
-print("cluster")
 
-userDf = pd.read_csv('D:\\final year project\Datasets\\user.csv')
+dataset = pd.read_csv(r'C:\Users\HP ITFAC\Desktop\FYP\Datasets\inputs\IdAndMoviesv6.csv')
+dataset.drop(labels = ['id.1','movie_list','O_Actual','C_Actual','E_Actual','A_Actual','N_Actual'],axis = 1,inplace = True)
+completeDataset = pd.read_csv(r'C:\Users\HP ITFAC\Desktop\FYP\Datasets\inputs\IdAndMoviesv6.csv')
+completeDataset.drop(labels = ['id.1','movie_list','O_Actual','C_Actual','E_Actual','A_Actual','N_Actual'],axis = 1,inplace = True)
+UIDs = completeDataset["id"]
+# In[8]:
+def getCluster(uid):
+    UidList = dataset["id"]
+    dataset.drop(labels = ['id'],axis = 1,inplace = True)
+    dataset.head()
 
-print(userDf.head())
-#****************************************************************************************
-# plot clustering output on the two datasets
-def cluster_plots(set1, set2, colours1 = 'gray', colours2 = 'gray',
-                  title1 = 'Dataset 1',  title2 = 'Dataset 2'):
+    result = completeDataset.query('id=='+str(uid)).head()
+    print(result)
+    result.drop(labels=['id'], axis=1, inplace=True)
+    featureList = result.iloc[0]
+    print(type(featureList))
+    personalityScoreArray = featureList.values
+    print(personalityScoreArray)
 
 
-    fig,(ax1,ax2) = plt.subplots(1, 2)
-    fig.set_size_inches(6, 3)
-    ax1.set_title(title1,fontsize=14)
-    ax1.set_xlim(min(set1[:,0]), max(set1[:,0]))
-    ax1.set_ylim(min(set1[:,1]), max(set1[:,1]))
-    ax1.scatter(set1[:, 0], set1[:, 1],s=8,lw=0,c= colours1)
-    ax2.set_title(title2,fontsize=14)
-    ax2.set_xlim(min(set2[:,0]), max(set2[:,0]))
-    ax2.set_ylim(min(set2[:,1]), max(set2[:,1]))
-    ax2.scatter(set2[:, 0], set2[:, 1],s=8,lw=0,c=colours2)
-    fig.tight_layout()
+    dataset1_standardized = dataset
+    # find the appropriate cluster number
+    plt.figure(figsize=(10, 8))
+    from sklearn.cluster import KMeans
+    wcss = []
+    for i in range(1, 11):
+        kmeans = KMeans(n_clusters = i, init = 'k-means++', random_state = 42)
+        kmeans.fit(dataset1_standardized)
+        wcss.append(kmeans.inertia_)
+    plt.plot(range(1, 11), wcss)
+    plt.title('The Elbow Method')
+    plt.xlabel('Number of clusters')
+    plt.ylabel('WCSS')
     plt.show()
 
-# standardize data ***********************************************************************
-dataset1 = userDf
-del dataset1['UID']
-#standardize the data to normal distribution
-from sklearn import preprocessing
-dataset1_standardized = preprocessing.scale(dataset1)
-dataset1_standardized = pd.DataFrame(dataset1_standardized)
 
-#*****************************************************************************************
+    dataset1 = dataset
+    # Fitting K-Means to the dataset
+    kmeans = KMeans(n_clusters = 4, init = 'k-means++', random_state = 42)
+    y_kmeans = kmeans.fit_predict(dataset1_standardized)
+    #beginning of  the cluster numbering with 1 instead of 0
+    y_kmeans1=y_kmeans
+    y_kmeans1=y_kmeans+1
+    # New Dataframe called cluster
+    cluster = pd.DataFrame(y_kmeans1)
+    # Adding cluster to the Dataset1
+    dataset1['cluster'] = cluster
+    dataset1['UID'] = UIDs
+    filename = 'C:\\Users\HP ITFAC\Desktop\FYP\datasets\\UserClusters.csv'
 
-# find the appropriate cluster number
-plt.figure(figsize=(10, 8))
-wcss = []
-for i in range(1, 11):
-    kmeans = KMeans(n_clusters = i, init = 'k-means++', random_state = 42)
-    kmeans.fit(dataset1)
-    wcss.append(kmeans.inertia_)
-plt.plot(range(1, 11), wcss)
-plt.title('The Elbow Method')
-plt.xlabel('Number of clusters')
-plt.ylabel('WCSS')
-#plt.show()    plot is temperorly disabled
+    # Use this function to search for any files which match your filename
+    files_present = glob.glob(filename)
 
-# Fitting K-Means to the dataset
-kmeans = KMeans(n_clusters = 4, init = 'k-means++', random_state = 42)
-y_kmeans = kmeans.fit_predict(userDf)
-#beginning of  the cluster numbering with 1 instead of 0
-y_kmeans1=y_kmeans
-y_kmeans1=y_kmeans+1
-# New Dataframe called cluster
-cluster = pd.DataFrame(y_kmeans1)
+    # if no matching files, write to csv, if there are matching files, print statement
+    if not files_present:
+        dataset1.to_csv(r'C:\Users\HP ITFAC\Desktop\FYP\datasets\UserClusters.csv', index=None, header=True)
+    else:
+        print('This file already exists!')
 
-# Adding cluster to the Dataset1
-userDf['cluster'] = cluster
-userDf2 = pd.read_csv('D:\\final year project\Datasets\\user.csv')
-userDf['UID'] = userDf2['UID']
-print(userDf)
-export_csv = userDf.to_csv (r'D:\\final year project\Datasets\\user_export_dataframe.csv', index = None, header=True)
-
-correct = 0
-print(kmeans.predict([[2.65  ,3.00  ,3.15  ,3.25,  4.40], [ 4.50,  4.00,  3.00,  4.50,  3.75]]))
-print(kmeans.cluster_centers_)
+    #Mean of clusters
+    kmeans_mean_cluster = pd.DataFrame.round(dataset1.groupby('cluster').mean(),1)
+    kmeans_mean_cluster
 
 
-'''
-X = np.array([[1, 2,3], [1, 4,6], [1, 0,1], [10, 2,5], [10, 4,8], [10, 0,1]])
-kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
-print(kmeans.labels_)
-#array([1, 1, 1, 0, 0, 0], dtype=int32)
-print(kmeans.predict([[1,2,3], [10,0,0]]))
-#array([1, 0], dtype=int32)
-print(kmeans.cluster_centers_)
-#array([[10.,  2.],[ 1.,  2.]])
-'''
-moviesDf = pd.read_csv("D:\\final year project\Datasets\\Movies.csv",header=0,encoding = 'unicode_escape')
-df = pd.read_csv("D:\\final year project\Datasets\\UserMovies.csv")
-df.columns = ['a', 'UID','movieId','d']
-userMoviesDf = df[['a','UID','movieId']]
+    dataset1.head()
 
 
-result = pd.merge( userMoviesDf, moviesDf, left_on='movieId', right_on='movieId')
-print(result)
+    print(dataset1)
+
+
+    # In[17]:
+
+
+    correct = 0
+    X = personalityScoreArray
+
+    predict_me = np.array(X)
+    print(predict_me)
+    predict_me = predict_me.reshape(-1, 5)
+    prediction = kmeans.predict(predict_me)
+    print(predict_me)
+
+    return (prediction)
+
+
+uid = 1281563425377910
+cluster = getCluster(uid)
+print(cluster[0]+1)
+
 
 
 
