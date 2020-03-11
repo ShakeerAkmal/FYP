@@ -8,7 +8,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-
 dataset = pd.read_csv(r'C:\Users\HP ITFAC\Desktop\FYP\Datasets\inputs\IdAndMoviesv6.csv')
 dataset.drop(labels = ['id.1','movie_list','O_Actual','C_Actual','E_Actual','A_Actual','N_Actual'],axis = 1,inplace = True)
 completeDataset = pd.read_csv(r'C:\Users\HP ITFAC\Desktop\FYP\Datasets\inputs\IdAndMoviesv6.csv')
@@ -19,10 +18,11 @@ def getCluster(uid):
     UidList = dataset["id"]
     dataset.drop(labels = ['id'],axis = 1,inplace = True)
     dataset.head()
+    print(completeDataset)
 
     result = completeDataset.query('id=='+str(uid)).head()
-    print(result)
     result.drop(labels=['id'], axis=1, inplace=True)
+    print(result)
     featureList = result.iloc[0]
     print(type(featureList))
     personalityScoreArray = featureList.values
@@ -90,13 +90,8 @@ def getCluster(uid):
     predict_me = predict_me.reshape(-1, 5)
     prediction = kmeans.predict(predict_me)
     print(predict_me)
-
-    return (prediction)
-
-
-uid = 1281563425377910
-cluster = getCluster(uid)
-print(cluster[0]+1)
+    clusterVal = prediction[0]+1
+    return (clusterVal)
 
 
 

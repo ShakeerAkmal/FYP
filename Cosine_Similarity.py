@@ -6,6 +6,7 @@ from scipy.spatial.distance import squareform
 from scipy.spatial.distance import pdist, jaccard
 from sklearn.feature_extraction.text import TfidfVectorizer
 #################################################################################################
+
 path = "D:\\final year project\Datasets\\Movies.csv"
 path.encode('utf-8').strip()
 moviesWithoutIndex = pd.read_csv(r"C:\Users\HP ITFAC\Desktop\FYP\datasets\inputs\Movies.csv",header=0,encoding = 'unicode_escape')
@@ -83,9 +84,5 @@ def get_similar_movies(mid):
     return simScore
 
 
-#print("recommended movies ")
-print(get_similar_movies(13))
-# featuer = getFeatureSimilarity()
-# genr = getGenreSimilarity()
-# print(featuer)
-# print(genr)
+# print(get_similar_movies(13))
+

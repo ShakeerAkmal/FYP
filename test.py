@@ -1,10 +1,10 @@
 import csv
 import numpy as np
 import pandas as pd
-#import ALS as als
-import ALS_recommendation as als2
-# import Cosine_Similarity as cos
-# import ClusterPersonality as cluster
+import time
+import ALS_recommendation as als
+import Cosine_Similarity as cos
+import Moviesforpersonality as Mp
 import sys, getopt, pprint
 from pymongo import MongoClient
 #CSV to JSON Conversion
@@ -35,8 +35,21 @@ def insertUsersToDb():
     print(users)
     db.User.insert_many(users.to_dict('records'))
 
-#insertUsersToDb()
 
-#als2
-#cos
-#cluster
+
+
+uid = 1281563425377910
+def GetRecommendations(UID):
+    print(str(UID))
+    alsresult = als.getALSReco(UID)
+    time.sleep(45)
+    cosresult = cos.get_similar_movies(9)
+    Mpresult = Mp.recoMovies(UID)
+    print("***************************final *********************************")
+    print(alsresult)
+    print(cosresult)
+    print(Mpresult)
+
+
+
+GetRecommendations(uid)
