@@ -41,28 +41,31 @@ def getGenreSimilarity():
 #################################################################################################
 
 def getFeatureSimilarity():
-    print(movies)
-    del movies['title']
-    del movies['genres']
+    # print(movies)
+    try:
+        del movies['title']
+        del movies['genres']
+    except:
+        print("")
     movies.fillna(0)
-    print(movies.count())
+    # print(movies.count())
 
     def standardize(row):
         new_row = (row - row.mean() )/ (row.max() - row.min())
         return new_row
 
     movies_std = movies.apply(standardize)
-    print(movies_std)
+    # print(movies_std)
     item_similarity = cosine_similarity(movies_std)
     # print("************************************")
     #print(item_similarity)
-    print(movies.columns)
+    # print(movies.columns)
     col_one_list = moviesWithoutIndex['movieId'].tolist()
-    print(col_one_list)
+    # print(col_one_list)
 
 
     item_similarity_df = pd.DataFrame(item_similarity, index=col_one_list, columns=col_one_list)
-    print(item_similarity_df)
+    # print(item_similarity_df)
     return item_similarity_df
 
 
@@ -78,7 +81,7 @@ def get_similar_movies(mid):
     simScore["genresimilar_score"] = genresimilar_score
     simScore["MId"] =col_one_list
     simScore = simScore.sort_values(by='itemsimilar_score', ascending=False)
-    simScore = simScore.head(10)
+    simScore = simScore.head(5)
     simScore = simScore.sort_values(by='genresimilar_score', ascending=False)
     # similar_score = itemsimilar_score.sort_values(ascending= False)
     return simScore

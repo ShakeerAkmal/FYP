@@ -87,7 +87,7 @@ def getALSReco(UID):
 
     tran = trans[['MID_index','MID']]
     Finalresult = pd.merge( recoDF, trans, left_on='MID_index', right_on='MID_index')
-    Finalresult = Finalresult[['MID_index','rating']]
+    Finalresult = Finalresult[['MID','rating']]
     Finalresult.drop_duplicates(keep=False,inplace=True)
 
     print("*******************************************************************************************")

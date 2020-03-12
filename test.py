@@ -36,20 +36,51 @@ def insertUsersToDb():
     db.User.insert_many(users.to_dict('records'))
 
 
+def GetRecommendations(UID):
+    IsExists = IsUserExists(UID)
+    if IsExists:
+        print(str(UID))
+        Mid = getUserMovies(UID)
+        if len(Mid) == 0:
+            print('the list is empty')
+            Mpresult = Mp.recoMovies(UID)
+            print(Mpresult)
+        else:
+            alsresult = als.getALSReco(UID)
+            time.sleep(45)
+            cosineResult = []
+            for i in Mid:
+                cosresult = cos.get_similar_movies(float(i))
+                cosineResult.append(cosresult)
+            Mpresult = Mp.recoMovies(UID)
+            print("***************************final *********************************")
+            print(alsresult)
+            print(cosineResult)
+            print(Mpresult)
+    else:
+        print("User does not exists")
+
+
+def IsUserExists(UID):
+    completeDataset = pd.read_csv(r'C:\Users\HP ITFAC\Desktop\FYP\Datasets\inputs\IdAndMoviesv6.csv')
+    result = completeDataset.query('id==' + str(UID)).head()
+    id = result["id"].values
+    try:
+        x = id[0]
+        isUser = True
+    except:
+        x=0
+        isUser = False
+    return x
+
+
+def getUserMovies(UID):
+    m2mDataset = pd.read_csv(r"C:\Users\HP ITFAC\Desktop\FYP\datasets\MovieManytoMany_dataframe.csv",header=None,encoding = 'unicode_escape')
+    m2mDataset.columns = ["UID", "movieId", "rating"]
+    result = m2mDataset.query('UID==' + str(UID)).head()
+    id = result["movieId"].values
+    return (id)
 
 
 uid = 1281563425377910
-def GetRecommendations(UID):
-    print(str(UID))
-    alsresult = als.getALSReco(UID)
-    time.sleep(45)
-    cosresult = cos.get_similar_movies(9)
-    Mpresult = Mp.recoMovies(UID)
-    print("***************************final *********************************")
-    print(alsresult)
-    print(cosresult)
-    print(Mpresult)
-
-
-
 GetRecommendations(uid)
