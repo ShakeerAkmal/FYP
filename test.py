@@ -7,6 +7,8 @@ import Cosine_Similarity as cos
 import Moviesforpersonality as Mp
 import sys, getopt, pprint
 from pymongo import MongoClient
+import statistics
+
 #CSV to JSON Conversion
 csvfile = open('D:\\final year project\Datasets\mypersonality_final.csv', 'r')
 reader = csv.DictReader( csvfile )
@@ -53,10 +55,12 @@ def GetRecommendations(UID):
                 cosresult = cos.get_similar_movies(float(i))
                 cosineResult.append(cosresult)
             Mpresult = Mp.recoMovies(UID)
+            result = pd.concat(cosineResult)
             print("***************************final *********************************")
-            print(alsresult)
-            print(cosineResult)
+            print (alsresult)
+            print(result)
             print(Mpresult)
+            return (alsresult,result,Mpresult)
     else:
         print("User does not exists")
 
@@ -83,4 +87,7 @@ def getUserMovies(UID):
 
 
 uid = 1281563425377910
-GetRecommendations(uid)
+x, y ,z = GetRecommendations(uid)
+print("Standard Deviation of x is % s "% (statistics.stdev(x["rating"])))
+print("Standard Deviation of y is % s "% (statistics.stdev(y["itemsimilar_score"])))
+print("Standard Deviation of z is % s "% (statistics.stdev(z["genreScore"])))
