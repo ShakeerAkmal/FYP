@@ -42,7 +42,7 @@ def getCluster(uid):
     plt.title('The Elbow Method')
     plt.xlabel('Number of clusters')
     plt.ylabel('WCSS')
-    plt.show()
+    # plt.show()
 
 
     dataset1 = dataset
