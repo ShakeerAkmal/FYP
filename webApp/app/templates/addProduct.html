@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Add Product</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/iconic/css/material-design-iconic-font.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animsition/css/animsition.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/daterangepicker/daterangepicker.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/noui/nouislider.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+<!--===============================================================================================-->
+</head>
+<body>
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form" action="/addProdcutValue" method="POST" id="form1">
+				<span class="contact100-form-title">
+                    User details
+				</span>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Please Type Product Name">
+					<span class="label-input100">User Name</span>
+					<p class="input100" id="a1">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Please Type Product Name">
+					<span class="label-input100">Watched Movies</span>
+					<p class="input100" id="a10">
+				</div>
+
+                <div class="wrap-input100 validate-input bg1" data-validate="Please Type Product Name">
+					<span class="label-input100">Openness</span>
+					<p class="input100" id="a11">
+				</div>
+
+<!--				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">-->
+<!--					<span class="label-input100">Page Rank Score</span>-->
+<!--					<p class="input100" id="a2">-->
+<!--				</div>-->
+
+<!--                <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">-->
+<!--					<span class="label-input100">Hub score</span>-->
+<!--					<p class="input100" id="a12">-->
+<!--				</div>-->
+
+                <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">
+					<span class="label-input100">Conscientiousness</span>
+					<p class="input100" id="a4">
+				</div>
+
+
+
+<!--                 <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">-->
+<!--					<span class="label-input100">Average Similarity score</span>-->
+<!--					<p class="input100" id="a6">-->
+<!--				</div>-->
+
+                 <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">
+					<span class="label-input100">Extraversion</span>
+					<p class="input100" id="a7">
+				</div>
+
+                <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">
+					<span class="label-input100">Neuroticism</span>
+					<p class="input100" id="a8">
+				</div>
+
+                <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Price">
+					<span class="label-input100">Agreeableness</span>
+					<p class="input100" id="a9">
+				</div>
+
+
+
+
+				<div class="container-contact100-form-btn">
+					<button type="button" class="contact100-form-btn" style= "color: white; width: 772px;" onClick="location.href='/ranking'" >
+						<span>
+							Back
+						</span>
+					</button>
+				</div>
+				<div class="container-contact100-form-btn">
+				<form class="navbar-form navbar-left" action="/recommmend" method="POST" >
+					<input type="hidden" class="form-control"  name="reco" id="RecoFormUid" >
+				  	<button type="submit" class="contact100-form-btn" style= "color: white; width: 772px;">Recommend Movies</button>
+    			</form>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+
+
+<script>
+Print()
+function Print() {
+console.log("sajith")
+    var Mydata = JSON.parse('{{ datset | safe}}');
+console.log(Mydata)
+document.getElementById("RecoFormUid").value = Mydata.uid;
+document.getElementById("a1").innerHTML = Mydata.uid
+<!--document.getElementById("a2").innerHTML = Mydata.pageRank-->
+<!--document.getElementById("a12").innerHTML = Mydata.Hub-->
+document.getElementById("a4").innerHTML = Mydata.C_Predicted
+<!--document.getElementById("a6").innerHTML = Mydata.Similarity-->
+document.getElementById("a7").innerHTML = Mydata.E_Predicted
+document.getElementById("a8").innerHTML = Mydata.N_Predicted
+document.getElementById("a9").innerHTML = Mydata.A_Predicted
+document.getElementById("a10").innerHTML = Mydata.movies
+document.getElementById("a11").innerHTML = Mydata.O_Predicted
+<!--Openness-->
+<!--Conscientiousness-->
+<!--Extraversion-->
+<!--Agreeableness-->
+<!--Neuroticism-->
+
+}
+</script>
+
+</body>
+</html>
